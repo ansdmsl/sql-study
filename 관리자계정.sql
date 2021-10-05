@@ -1,6 +1,6 @@
 SELECT SYSDATE FROM DUAL;
 
- -- ÇÑÁÙ ÁÖ¼® 
- --  HR°èÁ¤(¿¬½À¿ë°èÁ¤)À» ¾ð¶ôÇÏ°í ºñ¹Ð¹øÈ£ ÁöÁ¤¤©
+ -- í•œì¤„ ì£¼ì„ 
+ --  HRê³„ì •(ì—°ìŠµìš©ê³„ì •)ì„ ì–¸ë½í•˜ê³  ë¹„ë°€ë²ˆí˜¸ ì§€ì •ã„¹
 ALTER USER HR ACCOUNT UNLOCK 
 IDENTIFIED BY 1234;
