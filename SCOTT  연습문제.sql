@@ -150,7 +150,8 @@ FROM emp
 WHERE deptno = 10;
 --34
 SELECT ename,sal, NVL(comm,0),sal+NVL(comm,0) total
-FROM emp;
+FROM emp
+order by total desC;
 --35
 SELECT ename,sal, to_char(round(sal*0.15,1),'$999,999.0') 회비
 from emp
@@ -160,7 +161,7 @@ SELECT d.dname , count(e.empno)
 FROM emp e
 JOIN dept d
 on e.deptno=d.deptno
-GROUP by e.deptno, d.dname
+GROUP by d.dname -- e.deptno, 없어도 된다
 HAVING COUNT(empno) >5;
 
  --37
@@ -170,20 +171,27 @@ HAVING COUNT(empno) >5;
  GROUP BY job HAVING SUM(SAL)> 5000;
 
  --38
- SELECT empno , ename , sal, grade
- from emp
- JOIN salgrade 
- on sal BETWEEN losal and hisal;
+ SELECT e.empno , e.ename , e.sal, s.grade
+ from emp e
+ JOIN salgrade s
+ on e.sal BETWEEN s.losal and s.hisal; -- 비동등조인
 --39
-select deptno, count(*) 사원수, count(nvl(comm,0)) 커미션받은사원수
+select deptno, count(*) 사원수, count(comm) as "커미션 받은 사원수" -- 띄워쓰기 하고싶으면 쌍따옴표 써야함
 from emp
 GROUP BY deptno;
 --40
 select ename, deptno,
 decode ( deptno  ,10 ,'총무부'
                 ,20,'개발부'
-                , '영업부'
+                , '영업부' -- 30, '영업부' 라고 해도됨
             ) "부서명"
+from emp;
+
+select ename, deptno,
+case deptno  when 10 then '총무부'
+             when 20 then '개발부'
+             when 30 then '총무부'
+             end "부서명" 
 from emp;
 
 

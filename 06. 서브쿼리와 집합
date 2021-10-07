@@ -1,0 +1,92 @@
+--서브쿼리
+--POP 직원보다 교용일이 최근(이후)에 고용한 사람 
+-- 주의점 단일행 서브쿼리를 사용할때는 서브쿼리의 결과가 비교하는 데이터와 같고 하나만 출력되어야 한다,
+select last_name 이름, hire_date 고용일자
+from employees
+where hire_date > ( select hire_date from employees where last_name = 'Popp');
+
+--그룹함수의 결과를서브쿼리로사용 
+select last_name 이름, job_id 직종 , salary 급여 
+from employees
+where  salary = ( select min( salary ) from employees); -- 직원들중 가장 낮은 급여뽑기 : 그러면 급여 값만 나옴 -> 그 값이 누구에 해당하는가 검색
+
+-- 예제
+select last_name, salary
+from employees
+where salary > ( select salary from employees where last_name = 'Abel');
+-- 예제2
+select employee_id 직원번호 ,last_name 이름,department_id 부서번호, salary 급여
+from employees
+where department_id = (select department_id from employees where last_name = 'Bull')
+and salary > ( select salary from employees where last_name = 'Bull');
+-- 예제3
+select last_name 이름 , salary 급여, manager_id 매니저
+from employees
+where manager_id = (select employee_id from employees where last_name = 'Russell');
+-- 예제2
+select *
+from employees
+where job_id = ( select job_id from jobs where job_title = 'Stock Manager');
+
+-- 다중행 서브쿼리 (서브쿼리 결과과 여러개의 행으로 출력 )
+
+SELECT MIN(salary) FROM employees Group BY department_id; -- 부서별 최저월급 
+
+-- 다중행 서브쿼리에서는 바로 부등호 비교연산자는 몬씀 단일행에서만 쓸수있따 
+--  >결과가 여러개로 나올경우 몬쓴다 
+-- in은 값이 하나라도 같으면 검색됨 
+SELECT department_id ,employee_id , last_name
+FROM employees 
+--WHERE salary = ( SELECT MIN(salary) FROM employees Group BY department_id);
+WHERE salary in ( SELECT MIN(salary) FROM employees Group BY department_id)
+order by department_id;
+
+-- any 도 값이 하나라도 맞으면 검색됨 
+SELECT department_id ,last_name, salary 
+FROM employees
+WHERE salary < ANY( SELECT salary FROM employees  WHERE job_id = 'IT_PROG' )
+    AND job_id != 'IT_PROG'
+order by department_id;
+
+-- aLL은  값이 전부 다 만족 해야 된다. 
+SELECT department_id ,last_name, salary 
+FROM employees
+WHERE salary < ALL( SELECT salary FROM employees  WHERE job_id = 'IT_PROG' )
+    AND job_id != 'IT_PROG'
+order by department_id;
+
+--에제
+SELECT employee_id , first_name, job_id 직종, salary 급여
+FROM employees 
+WHERE manager_id  in ( SELECT manager_id FROM employees where department_id = 20)
+    and department_id != 20;
+
+--예제2
+SELECT employee_id ,last_name, job_id , salary 
+FROM employees
+WHERE salary < ANY( SELECT salary FROM employees  WHERE job_id = 'ST_MAN' );
+
+--예제3
+SELECT employee_id ,last_name, job_id , salary 
+FROM employees
+WHERE salary < ALL( SELECT salary FROM employees  WHERE job_id = 'IT_PROG' );
+
+--다중열 서브쿼리 ( 열이 여러개 일때 )
+-- 이름이 브루스인 직원과 같은 매니저, 같은 직업인 직원들 출력 
+select employee_id, first_name, job_id, salary, manager_id
+from employees
+where (manager_id, job_id) in (select manager_id, job_id from employees where first_name = 'Bruce')
+    and first_name <> 'Bruce';
+
+--부서별 최소 급여를 받는 직웜 
+select  first_name, job_id, salary, e.department_id
+from employees e
+where (department_id, salary) in ( select department_id, min(salary) from employees group by department_id )
+order by e.department_id;
+
+--예제
+select  first_name, job_id, salary, e.department_id
+from employees e
+where (job_id, salary) in ( select job_id, min(salary) from employees group by job_id )
+order by SALARY DESC;
+
