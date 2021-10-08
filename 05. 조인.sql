@@ -51,3 +51,7 @@ from employees e FULL OUTER JOIN departments d on e.department_id = d.department
 SELECT c.country_name 국가, c.country_id 국가번호 , l.location_id 지역번호 ,l.city 도시
 from countries c left outer join locations l on c.country_id =l.country_id
 order by 지역번호 desc;
+
+SELECT country_name 국가, r.region_name 지역이름 
+from countries c
+cross JOIN regions r ;

@@ -90,3 +90,43 @@ from employees e
 where (job_id, salary) in ( select job_id, min(salary) from employees group by job_id )
 order by SALARY DESC;
 
+-- 집합
+--union 합집합 : 중복을 제거한다 결과줄수 155
+SELECT employee_id 직원번호, job_id 직종 FROM employees 
+union
+SELECT employee_id 직원번호, job_id 직종 FROM job_history;
+
+--union all 합집합 : 중복을 제거한다  결과줄수 157
+SELECT employee_id 직원번호, job_id 직종 FROM employees 
+union all
+SELECT employee_id 직원번호, job_id 직종 FROM job_history;
+
+-- intersect 교집합
+SELECT employee_id 직원번호, job_id 직종 FROM employees 
+intersect
+SELECT employee_id 직원번호, job_id 직종 FROM job_history;
+
+-- minus 차집합 결과줄수 105 : 107 - 2 
+SELECT employee_id 직원번호, job_id 직종 FROM employees 
+minus
+SELECT employee_id 직원번호, job_id 직종 FROM job_history;
+
+--예제 
+select department_id from employees
+UNION
+select department_id from departments;
+
+--예제 2
+select department_id from employees
+UNION ALL
+select department_id from departments;
+
+--예제 3
+select department_id from employees
+INTERSECT
+select department_id from departments;
+
+--예제 4
+select department_id from departments
+MINUS
+select department_id from employees;

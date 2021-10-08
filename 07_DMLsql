@@ -1,0 +1,84 @@
+--DML 작업
+
+-- 데이터 입력 insert
+insert into departments(department_id, department_name, manager_id, location_id)
+VALUES (300,'Game', 100, 1700);
+
+SELECT    *
+FROM departments order by department_id DESC;
+--테이블 열의 구조를 확인 
+DESC departments;
+
+--특정 열만 밉력 (미입력시 NULL)
+insert into departments(department_id, department_name)
+VALUES (280, 'MUSIC');
+--열의 이름들을 생략하면 다 적어야 함 
+insert into departments
+VALUES (290,'PUSAN', NULL , 1700);
+
+-- 예제 1
+insert into departments(department_id, department_name, manager_id,location_id)
+VALUES (271, 'Sample 1',200,1700);
+insert into departments(department_id, department_name, manager_id,location_id)
+VALUES (272, 'Sample 2',200,1700);
+insert into departments(department_id, department_name, manager_id,location_id)
+VALUES (273, 'Sample 3',200,1700);
+
+-- 데이터 수정 upadte
+UPDATE departments 
+SET manager_id = 200
+WHERE department_name = 'Game';
+
+
+SELECT    *
+FROM departments order by department_id DESC;
+
+-- 예제
+UPDATE departments 
+SET manager_id = 100
+WHERE department_id >= 150 and department_id <=200;
+-- betwenn 150 and 200
+
+--두개 이상 열을 업뎃 ( 열 ,열 ...) 
+UPDATE departments 
+SET manager_id = 200, location_id = 1800
+WHERE department_name = 'Game';
+
+--데이터 삭제 delete
+-- 특정 행만 
+DELETE FROM departments
+where department_name = 'MUSIC';
+
+DELETE FROM departments
+where department_name = 'Game';
+
+DELETE FROM departments
+where department_id = 290;
+
+DELETE FROM departments
+where department_name LIKE '%Sample%';
+
+-- 전체 삭제 (where 을 안적었을때 )
+-- 삭제 오류는 직원 테이블에서 사용하고 있는 부서는 바로 삭제 불사 
+delete from departments;
+
+delete from departments
+WHERE department_id >= 120;
+
+--커밋 전에는 롤백 가능 
+rollback;
+--게임부서 생성하고 commit
+commit;
+
+-- 자동커밋 설정 
+show autocommit;
+-- on 실행시에 자동의 commit 
+set autocommit on;
+-- off 실행시에 수동 
+set autocommit off;
+
+
+
+
+
+
